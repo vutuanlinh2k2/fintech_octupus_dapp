@@ -4,7 +4,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 
 import { boxComponentStyles } from "../styles";
 
-const LeftSideCard = ({ title, getDataFunction }) => {
+const CardTemplate = ({ title, getDataFunction }) => {
   const [body, setBody] = useState(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const LeftSideCard = ({ title, getDataFunction }) => {
     <Card
       style={{ ...boxComponentStyles }}
       title={title}
-    //   headStyle={{ color: "#aaaaaa"}}
+      headStyle={{ color: "#708090" }}
     >
       {body === null ? (
         <LoadingOutlined />
@@ -30,4 +30,5 @@ const LeftSideCard = ({ title, getDataFunction }) => {
   );
 };
 
-export default LeftSideCard;
+export default CardTemplate;
+

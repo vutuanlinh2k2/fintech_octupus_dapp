@@ -2,8 +2,9 @@ import "./App.css";
 
 import Header from "./Header";
 import NoEthereum from "./NoEthereum";
-import LeftSide from "./LeftSide/LeftSide";
-import RightSide from "./RightSide/RightSide";
+
+import CardsContainer from "./Card/CardsContainer";
+import PersonalSection from "./PersonalSection/PersonalSection";
 
 function App() {
   if (!window.ethereum) {
@@ -13,10 +14,8 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <div style={{ display: "flex", gap: "1.5rem", marginTop: "1.5rem" }}>
-        <LeftSide />
-        <RightSide />
-      </div>
+      <CardsContainer />
+      <PersonalSection />
     </div>
   );
 }

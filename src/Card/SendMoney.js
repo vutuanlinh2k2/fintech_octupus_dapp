@@ -33,6 +33,7 @@ const SendMoney = () => {
       title="Send Money To Club's Budget"
       bordered={false}
       style={{ ...boxComponentStyles, width: "100%", flex: 1 }}
+      headStyle={{ color: "#708090" }}
     >
       <Input
         addonAfter="ETH"
