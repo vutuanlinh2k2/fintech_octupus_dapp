@@ -12,7 +12,7 @@ const Manager = () => {
     return currentBudget;
   };
 
-  return <CardTemplate title="Total members" getDataFunction={getBudget} />;
+  return <CardTemplate title="Current Club Budget (ETH)" getDataFunction={getBudget} />;
 };
 
 export default Manager;

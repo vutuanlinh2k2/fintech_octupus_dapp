@@ -10,7 +10,7 @@ const Manager = () => {
     return manager;
   };
 
-  return <CardTemplate title="Total members" getDataFunction={getManager} />;
+  return <CardTemplate title="Manager Address" getDataFunction={getManager} />;
 };
 
 export default Manager;

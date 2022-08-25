@@ -12,7 +12,7 @@ const NumCompletedRequests = () => {
 
   return (
     <CardTemplate
-      title="Total members"
+      title="Completed Requests Number"
       getDataFunction={getCompletedRequests}
     />
   );

@@ -1,16 +1,71 @@
-import React from "react";
-import { Card } from "antd";
+import React, { useState } from "react";
+import { ethers } from "ethers";
+import { Card, Button } from "antd";
+import getContract from "../ethereum/ethereum";
 
+import AddRequestInput from "./AddRequestInput";
 import { boxComponentStyles } from "../styles";
 
 const AddNewRequest = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [recipient, setRecipient] = useState("");
+  const [value, setValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const addNewRequest = async () => {
+    const contract = getContract();
+    setIsLoading(true);
+    try {
+      let tx = await contract.createRequest(
+        title,
+        description,
+        recipient,
+        ethers.utils.parseEther(value)
+      );
+      await tx.wait().then(() => {
+        window.location.reload(false);
+      });
+    } catch (err) {
+      console.log("err :", err);
+    }
+    setIsLoading(false);
+  };
+
   return (
-    <div style={{flex: 1}}>
+    <div style={{ flex: 1 }}>
       <Card
         style={{ ...boxComponentStyles }}
         title="Add New Request"
         headStyle={{ color: "#708090" }}
-      ></Card>
+      >
+        <AddRequestInput label="Title" placeholder="" setOnChange={setTitle} />
+        <AddRequestInput
+          label="Description"
+          placeholder=""
+          setOnChange={setDescription}
+        />
+        <AddRequestInput
+          label="Recipient Address"
+          placeholder=""
+          setOnChange={setRecipient}
+        />
+        <AddRequestInput
+          label="Value"
+          placeholder=""
+          setOnChange={setValue}
+          isPayable
+        />
+        <Button
+          style={{ marginTop: "10px" }}
+          type="primary"
+          shape="round"
+          onClick={addNewRequest}
+          loading={isLoading}
+        >
+          Add New Request
+        </Button>
+      </Card>
     </div>
   );
 };

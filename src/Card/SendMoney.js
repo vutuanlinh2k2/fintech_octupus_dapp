@@ -46,7 +46,7 @@ const SendMoney = () => {
         onClick={sendMoney}
         loading={isLoading}
       >
-        Send money
+        Send Money
       </Button>
     </Card>
   );

@@ -6,12 +6,16 @@ import getContract from "../ethereum/ethereum";
 const NumActiveRequests = () => {
   const getActiveRequests = async () => {
     const contract = getContract();
-    const activeRequests = await contract.getRequestCount();
-    return activeRequests.toNumber();
+    const numRequests = await contract.getRequestCount();
+    const completedRequests = await contract.completeRequestsCount();
+    return numRequests.toNumber() - completedRequests.toNumber();
   };
 
   return (
-    <CardTemplate title="Total members" getDataFunction={getActiveRequests} />
+    <CardTemplate
+      title="Active Requests Number"
+      getDataFunction={getActiveRequests}
+    />
   );
 };
 

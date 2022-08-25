@@ -11,7 +11,7 @@ const NumActiveRequests = () => {
   };
 
   return (
-    <CardTemplate title="Total members" getDataFunction={getMemNumber} />
+    <CardTemplate title="Total Members" getDataFunction={getMemNumber} />
   );
 };
 
