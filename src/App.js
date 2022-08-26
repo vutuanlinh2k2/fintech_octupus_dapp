@@ -5,6 +5,8 @@ import NoEthereum from "./NoEthereum";
 
 import CardsContainer from "./Card/CardsContainer";
 import PersonalSection from "./PersonalSection/PersonalSection";
+import ActiveRequestsTable from "./Table/ActiveRequestsTable";
+import CompletedRequestsTable from "./Table/CompletedRequestsTable";
 
 function App() {
   if (!window.ethereum) {
@@ -16,6 +18,8 @@ function App() {
       <Header />
       <CardsContainer />
       <PersonalSection />
+      <ActiveRequestsTable />
+      <CompletedRequestsTable />
     </div>
   );
 }
