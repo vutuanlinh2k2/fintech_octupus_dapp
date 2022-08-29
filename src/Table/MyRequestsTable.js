@@ -3,12 +3,15 @@ import { Table, Tag } from "antd";
 import { ethers } from "ethers";
 import { LoadingOutlined } from "@ant-design/icons";
 
+import MyRequestModal from "../Modal/MyRequestModal";
 import getContract from "../ethereum/ethereum";
 
 const MyRequestsTable = () => {
   const [requests, setRequests] = useState([]);
   const [totalMember, setTotalMember] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [modalData, setModalData] = useState({});
 
   const getRequests = async () => {
     setIsLoading(true);
@@ -81,12 +84,12 @@ const MyRequestsTable = () => {
       {
         title: "Approvals",
         dataIndex: "approvalsCount",
-        render: (approvals) => (
-          <>
-            {approvals.toNumber()}/
-            {totalMember ? totalMember : <LoadingOutlined />}
-          </>
-        ),
+        render: (approvals) =>
+          totalMember ? (
+            `${approvals.toNumber()}/${totalMember}`
+          ) : (
+            <LoadingOutlined />
+          ),
       },
     ];
   }, [totalMember]);
@@ -108,14 +111,31 @@ const MyRequestsTable = () => {
   }
 
   return (
-    <Table
-      columns={columns}
-      dataSource={requests}
-      pagination={{
-        pageSize: 5,
-      }}
-      bordered
-    />
+    <>
+      <Table
+        columns={columns}
+        dataSource={requests}
+        pagination={{
+          pageSize: 5,
+        }}
+        bordered
+        onRow={(record, _) => {
+          return {
+            onClick: () => {
+              setModalData(record);
+              setIsOpenModal(true);
+            },
+          };
+        }}
+      />
+      <MyRequestModal
+        visible={isOpenModal}
+        data={modalData}
+        onClose={() => {
+          setIsOpenModal(false);
+        }}
+      />
+    </>
   );
 };
 

@@ -3,45 +3,45 @@ import { Table, Card } from "antd";
 import { ethers } from "ethers";
 import { LoadingOutlined } from "@ant-design/icons";
 
+import CompletedRequestModal from "../Modal/CompletedRequestModal";
 import getContract from "../ethereum/ethereum";
 import { boxComponentStyles } from "../styles";
 
 const columns = [
-    {
-      title: "Title",
-      dataIndex: "title",
-      render: (title) =>
-        title.length < 15 ? title : title.slice(0, 12) + "...",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      render: (description) =>
-        description.length < 20
-          ? description
-          : description.slice(0, 17) + "...",
-    },
-    {
-      title: "Value",
-      dataIndex: "value",
-      render: (value) => ethers.utils.formatEther(value.toNumber()),
-    },
-    {
-      title: "Owner",
-      dataIndex: "owner",
-      render: (owner) => owner.substring(0, 5) + "..." + owner.slice(-3),
-    },
-    {
-      title: "Recipient",
-      dataIndex: "recipient",
-      render: (recipient) =>
-        recipient.substring(0, 5) + "..." + recipient.slice(-3),
-    },
-  ];
+  {
+    title: "Title",
+    dataIndex: "title",
+    render: (title) => (title.length < 15 ? title : title.slice(0, 12) + "..."),
+  },
+  {
+    title: "Description",
+    dataIndex: "description",
+    render: (description) =>
+      description.length < 20 ? description : description.slice(0, 17) + "...",
+  },
+  {
+    title: "Value",
+    dataIndex: "value",
+    render: (value) => ethers.utils.formatEther(value.toNumber()),
+  },
+  {
+    title: "Owner",
+    dataIndex: "owner",
+    render: (owner) => owner.substring(0, 5) + "..." + owner.slice(-3),
+  },
+  {
+    title: "Recipient",
+    dataIndex: "recipient",
+    render: (recipient) =>
+      recipient.substring(0, 5) + "..." + recipient.slice(-3),
+  },
+];
 
 const CompletedRequestsTable = () => {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [modalData, setModalData] = useState({});
 
   const getRequests = async () => {
     setIsLoading(true);
@@ -87,11 +87,26 @@ const CompletedRequestsTable = () => {
           dataSource={requests}
           pagination={{
             pageSize: 5,
-            position: ["bottomCenter"]
+            position: ["bottomCenter"],
           }}
           bordered
+          onRow={(record, _) => {
+            return {
+              onClick: () => {
+                setModalData(record);
+                setIsOpenModal(true);
+              },
+            };
+          }}
         />
       )}
+      <CompletedRequestModal
+        visible={isOpenModal}
+        data={modalData}
+        onClose={() => {
+          setIsOpenModal(false);
+        }}
+      />
     </Card>
   );
 };

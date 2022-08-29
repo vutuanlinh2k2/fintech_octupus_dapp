@@ -3,6 +3,7 @@ import { Table, Card, Button } from "antd";
 import { ethers } from "ethers";
 import { LoadingOutlined } from "@ant-design/icons";
 
+import ActiveRequestModal from "../Modal/ActiveRequestModal";
 import getContract from "../ethereum/ethereum";
 import { boxComponentStyles } from "../styles";
 
@@ -10,6 +11,8 @@ const ActiveRequestsTable = () => {
   const [requests, setRequests] = useState([]);
   const [totalMember, setTotalMember] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [modalData, setModalData] = useState({});
 
   const getRequests = async () => {
     setIsLoading(true);
@@ -73,12 +76,12 @@ const ActiveRequestsTable = () => {
       {
         title: "Approvals",
         dataIndex: "approvalsCount",
-        render: (approvals) => (
-          <>
-            {approvals.toNumber()}/
-            {totalMember ? totalMember : <LoadingOutlined />}
-          </>
-        ),
+        render: (approvals) =>
+          totalMember ? (
+            `${approvals.toNumber()}/${totalMember}`
+          ) : (
+            <LoadingOutlined />
+          ),
       },
       {
         title: null,
@@ -118,8 +121,23 @@ const ActiveRequestsTable = () => {
             position: ["bottomCenter"],
           }}
           bordered
+          onRow={(record, _) => {
+            return {
+              onClick: () => {
+                setModalData(record);
+                setIsOpenModal(true);
+              },
+            };
+          }}
         />
       )}
+      <ActiveRequestModal
+        visible={isOpenModal}
+        data={modalData}
+        onClose={() => {
+          setIsOpenModal(false);
+        }}
+      />
     </Card>
   );
 };
