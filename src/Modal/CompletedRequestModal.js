@@ -4,8 +4,7 @@ import { ethers } from "ethers";
 
 const CompletedRequestModal = (props) => {
   const { visible, data, onClose } = props;
-  const { title, description, value, owner, recipient } = data;
-  
+  const { id, title, description, value, owner, recipient } = data;
 
   const { Item: DescriptionItem } = Descriptions;
   return (
@@ -19,6 +18,7 @@ const CompletedRequestModal = (props) => {
       cancelButtonProps={{ style: { display: "none" } }}
     >
       <Descriptions column={1}>
+        <DescriptionItem label="Id">{id?.toNumber() ?? ''}</DescriptionItem>
         <DescriptionItem label="Title">{title}</DescriptionItem>
         <DescriptionItem label="Description">{description}</DescriptionItem>
         <DescriptionItem label="Value">

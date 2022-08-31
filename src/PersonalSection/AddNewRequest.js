@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
-import { Card, Button } from "antd";
+import { Card, Button, notification } from "antd";
 import getContract from "../ethereum/ethereum";
 
 import AddRequestInput from "./AddRequestInput";
@@ -24,9 +24,18 @@ const AddNewRequest = () => {
         ethers.utils.parseEther(value)
       );
       await tx.wait().then(() => {
-        window.location.reload(false);
+        notification["success"]({
+          message: "Success!",
+          description: "Creating request successfully!",
+        });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
       });
     } catch (err) {
+      notification.error({
+        message: "Oops! There was error occur!",
+      });
       console.log("err :", err);
     }
     setIsLoading(false);

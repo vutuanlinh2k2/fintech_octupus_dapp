@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Table, Card, Button } from "antd";
+import { Table, Card } from "antd";
 import { ethers } from "ethers";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -22,7 +22,7 @@ const ActiveRequestsTable = () => {
 
     for (let i = 0; i < numRequests; i++) {
       const request = await contract.requests(i);
-      if (!request.completed) {
+      if (!request.complete) {
         myRequests.push(request);
       }
     }
@@ -43,6 +43,14 @@ const ActiveRequestsTable = () => {
 
   const columns = useMemo(() => {
     return [
+      {
+        title: "Id",
+        dataIndex: "id",
+        render: (id) => id.toNumber(),
+        sorter: (a, b) => a.id.toNumber() > b.id.toNumber(),
+        sortOrder: "descending",
+        showSorterTooltip: false
+      },
       {
         title: "Title",
         dataIndex: "title",
@@ -83,21 +91,13 @@ const ActiveRequestsTable = () => {
             <LoadingOutlined />
           ),
       },
-      {
-        title: null,
-        render: (_) => (
-          <Button type="primary" shape="round" onClick={() => {}}>
-            Approve
-          </Button>
-        ),
-      },
     ];
   }, [totalMember]);
 
   return (
     <Card
       style={{ ...boxComponentStyles, height: "100%" }}
-      title="Current Active Requests"
+      title="Active Requests"
       headStyle={{ color: "#708090" }}
     >
       {isLoading ? (
@@ -117,11 +117,11 @@ const ActiveRequestsTable = () => {
           columns={columns}
           dataSource={requests}
           pagination={{
-            pageSize: 5,
+            pageSize: 3,
             position: ["bottomCenter"],
           }}
           bordered
-          onRow={(record, _) => {
+          onRow={(record, index) => {
             return {
               onClick: () => {
                 setModalData(record);

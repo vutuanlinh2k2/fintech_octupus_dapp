@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, message } from "antd";
+import { Modal, Input, message, notification } from "antd";
 import getContract from "../ethereum/ethereum";
 
 const AddMemberModal = ({ visible, onCancel }) => {
@@ -16,14 +16,19 @@ const AddMemberModal = ({ visible, onCancel }) => {
     try {
       const tx = await contract.addMember(address);
       await tx.wait().then(() => {
-        message.success("Added new member successfully!");
+        notification["success"]({
+          message: "Success!",
+          description: "Adding member successfully!",
+        });
         setTimeout(() => {
           window.location.reload(false);
         }, 3000);
       });
     } catch (err) {
+      notification.error({
+        message: "Oops! There was error occur!",
+      });
       console.log("err :", err);
-      message.error(err);
     }
   };
 

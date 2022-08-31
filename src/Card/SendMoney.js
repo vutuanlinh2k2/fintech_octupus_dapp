@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
-import { Card, Input, Button } from "antd";
+import { Card, Input, Button, notification } from "antd";
 
 import { boxComponentStyles } from "../styles";
 import getContract from "../ethereum/ethereum";
@@ -21,9 +21,18 @@ const SendMoney = () => {
         value: ethers.utils.parseEther(value),
       });
       await tx.wait().then(() => {
-        window.location.reload(false);
+        notification["success"]({
+          message: "Success!",
+          description: "Send money successfully!",
+        });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
       });
     } catch (err) {
+      notification.error({
+        message: "Oops! There was error occur!",
+      });
       console.log("err :", err);
     }
   };

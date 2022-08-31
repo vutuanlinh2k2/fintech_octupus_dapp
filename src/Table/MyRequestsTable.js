@@ -47,6 +47,14 @@ const MyRequestsTable = () => {
   const columns = useMemo(() => {
     return [
       {
+        title: "Id",
+        dataIndex: "id",
+        render: (id) => id.toNumber(),
+        sorter: (a, b) => a.id.toNumber() > b.id.toNumber(),
+        sortOrder: "descending",
+        showSorterTooltip: false
+      },
+      {
         title: "Title",
         dataIndex: "title",
         render: (title) =>
@@ -73,9 +81,9 @@ const MyRequestsTable = () => {
       },
       {
         title: "Status",
-        dataIndex: "completed",
-        render: (completed) =>
-          completed ? (
+        dataIndex: "complete",
+        render: (complete) =>
+          complete ? (
             <Tag color="green">Completed</Tag>
           ) : (
             <Tag color="blue">Active</Tag>
@@ -123,10 +131,12 @@ const MyRequestsTable = () => {
           return {
             onClick: () => {
               setModalData(record);
+              console.log('record :', record);
               setIsOpenModal(true);
             },
           };
         }}
+        showSorterTooltip={false}
       />
       <MyRequestModal
         visible={isOpenModal}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Descriptions, Button } from "antd";
+import { Modal, Descriptions, Button, notification, message } from "antd";
 import { ethers } from "ethers";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -7,9 +7,35 @@ import getContract from "../ethereum/ethereum";
 
 const ActiveRequestModal = (props) => {
   const { visible, data, onClose } = props;
-  const { title, description, value, owner, recipient, approvalsCount } = data;
+  const { id, title, description, value, owner, recipient, approvalsCount } =
+    data;
 
   const [totalMember, setTotalMember] = useState();
+  const [isApproving, setIsApproving] = useState(false);
+
+  const approveRequest = async () => {
+    const contract = getContract();
+    setIsApproving(true);
+
+    try {
+      const tx = await contract.approveRequest(id.toNumber());
+      await tx.wait().then(() => {
+        notification["success"]({
+          message: "Success!",
+          description: "Approving request successfully!",
+        });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
+      });
+    } catch (err) {
+      notification.error({
+        message: "Oops! There was error occur!",
+      });
+      console.log("err :", err);
+    }
+    setIsApproving(false);
+  };
 
   useEffect(() => {
     const getMemNumber = async () => {
@@ -32,6 +58,7 @@ const ActiveRequestModal = (props) => {
       cancelButtonProps={{ style: { display: "none" } }}
     >
       <Descriptions column={1}>
+        <DescriptionItem label="Id">{id?.toNumber() ?? ""}</DescriptionItem>
         <DescriptionItem label="Title">{title}</DescriptionItem>
         <DescriptionItem label="Description">{description}</DescriptionItem>
         <DescriptionItem label="Value">
@@ -49,9 +76,10 @@ const ActiveRequestModal = (props) => {
         </DescriptionItem>
       </Descriptions>
       <Button
-        style={{ marginTop: "0.5rem" }}
+        style={{ marginTop: "0.5rem", marginRight: "0.5rem" }}
         type="primary"
-        onClick={() => {}}
+        onClick={approveRequest}
+        loading={isApproving}
       >
         Approve
       </Button>

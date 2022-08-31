@@ -9,6 +9,14 @@ import { boxComponentStyles } from "../styles";
 
 const columns = [
   {
+    title: "Id",
+    dataIndex: "id",
+    render: (id) => id.toNumber(),
+    sorter: (a, b) => a.id.toNumber() > b.id.toNumber(),
+    sortOrder: "descending",
+    showSorterTooltip: false
+  },
+  {
     title: "Title",
     dataIndex: "title",
     render: (title) => (title.length < 15 ? title : title.slice(0, 12) + "..."),
@@ -51,7 +59,7 @@ const CompletedRequestsTable = () => {
 
     for (let i = 0; i < numRequests; i++) {
       const request = await contract.requests(i);
-      if (request.completed) {
+      if (request.complete) {
         myRequests.push(request);
       }
     }
@@ -66,7 +74,7 @@ const CompletedRequestsTable = () => {
   return (
     <Card
       style={{ ...boxComponentStyles, height: "100%", marginBottom: "1rem" }}
-      title="Current Completed Requests"
+      title="Completed Requests"
       headStyle={{ color: "#708090" }}
     >
       {isLoading ? (
