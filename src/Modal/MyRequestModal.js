@@ -91,7 +91,7 @@ const MyRequestModal = (props) => {
           approvalsCount.toNumber() / totalMember <= 0.5
         }
       >
-        Finalize
+        {isFinalizing ? "Finalizing" : "Finalize"}
       </Button>
     </Modal>
   );

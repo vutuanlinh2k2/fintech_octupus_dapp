@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, message, notification } from "antd";
+import { Modal, Input, notification } from "antd";
 import getContract from "../ethereum/ethereum";
 
 const AddMemberModal = ({ visible, onCancel }) => {
@@ -38,7 +38,7 @@ const AddMemberModal = ({ visible, onCancel }) => {
       centered
       visible={visible}
       onCancel={onCancel}
-      okText="Add"
+      okText={isLoading ? "Adding" : "Add"}
       onOk={addMember}
       confirmLoading={isLoading}
     >

@@ -72,7 +72,7 @@ const AddNewRequest = () => {
           onClick={addNewRequest}
           loading={isLoading}
         >
-          Add New Request
+          {isLoading ? "Adding New Request" : "Add New Request"}
         </Button>
       </Card>
     </div>

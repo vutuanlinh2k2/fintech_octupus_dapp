@@ -1,5 +1,5 @@
-export const contractAddress = "0x7807FAC6034Fce36778CE37904490DE90c47009f";
-// export const contractAddress = "0x23d747D75F4A5275fE21061C4dB17F7D204E19D3";
+// you can deploy a new smart contract and replace its address with this
+export const contractAddress = "0x524A55A512D1b7Ce0785C70762fb14307B6D2880";
 
 export const abi = [
   {

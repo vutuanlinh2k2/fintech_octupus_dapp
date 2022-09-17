@@ -3,23 +3,25 @@ pragma solidity ^0.7.0;
 
 contract Club {
     struct Request {
-       string title;
-       string description;
-       uint256 value;
-       address owner;
-       address recipient;
-       bool complete;
-       uint256 approvalsCount;
-       mapping(address => bool) approvals;
+        uint256 id;
+        string title;
+        string description;
+        uint256 value;
+        address owner;
+        address recipient;
+        bool complete;
+        uint256 approvalsCount;
+        mapping(address => bool) approvals;
     }
-    
+
     Request[] public requests;
     mapping(address => bool) public members;
     uint256 public membersCount;
+    uint256 public requestsCount;
     uint256 public completeRequestsCount;
 
     address public manager;
-    
+
     modifier managerOnly() {
         require(msg.sender == manager);
         _;
@@ -37,6 +39,7 @@ contract Club {
     }
 
     function addMember(address newMember) public managerOnly {
+        require(!members[newMember]);
         members[newMember] = true;
         membersCount++;
     }
@@ -45,9 +48,7 @@ contract Club {
         return address(this).balance;
     }
 
-    function sendMoneyToBudget() public payable memberOnly {
-
-    }
+    function sendMoneyToBudget() public payable memberOnly {}
 
     function createRequest(
         string memory title,
@@ -58,6 +59,7 @@ contract Club {
         require(value <= address(this).balance);
 
         Request storage newRequest = requests.push();
+        newRequest.id = requestsCount;
         newRequest.title = title;
         newRequest.description = description;
         newRequest.value = value;
@@ -65,6 +67,8 @@ contract Club {
         newRequest.recipient = recipient;
         newRequest.complete = false;
         newRequest.approvalsCount = 0;
+
+        requestsCount++;
     }
 
     function approveRequest(uint256 index) public memberOnly {
@@ -75,37 +79,16 @@ contract Club {
         request.approvalsCount++;
     }
 
-    function finalizeRequest(uint256 index) public managerOnly {
+    function finalizeRequest(uint256 index) public {
         Request storage request = requests[index];
 
         require(request.approvalsCount >= (membersCount / 2));
         require(!request.complete);
+        require(request.owner == msg.sender);
 
         payable(request.recipient).transfer(request.value);
         request.complete = true;
         completeRequestsCount++;
-    }
-
-    function deleteRequesst(uint256 index) public {
-        require(msg.sender == requests[index].owner);
-        require(!requests[index].complete);
-        delete requests[index];
-    }
-
-    function getSummary() public view returns (
-        uint256,
-        uint256,
-        uint256,
-        uint256,
-        address
-    ) {
-        return (
-            address(this).balance,
-            requests.length,
-            membersCount,
-            completeRequestsCount,
-            manager
-        );
     }
 
     function getMemberCount() public view returns (uint256) {
@@ -113,6 +96,6 @@ contract Club {
     }
 
     function getRequestCount() public view returns (uint256) {
-        return requests.length;
+        return requestsCount;
     }
 }

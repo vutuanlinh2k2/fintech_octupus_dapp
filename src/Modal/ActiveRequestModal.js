@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Descriptions, Button, notification, message } from "antd";
+import { Modal, Descriptions, Button, notification } from "antd";
 import { ethers } from "ethers";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -81,7 +81,7 @@ const ActiveRequestModal = (props) => {
         onClick={approveRequest}
         loading={isApproving}
       >
-        Approve
+        {isApproving ? "Approving" : "Approve"}
       </Button>
     </Modal>
   );

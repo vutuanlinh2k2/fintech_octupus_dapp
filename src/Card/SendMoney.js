@@ -55,7 +55,7 @@ const SendMoney = () => {
         onClick={sendMoney}
         loading={isLoading}
       >
-        Send Money
+        {isLoading ? "Sending Money" : "Send Money"}
       </Button>
     </Card>
   );
